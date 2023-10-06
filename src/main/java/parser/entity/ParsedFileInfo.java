@@ -5,7 +5,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "parsed_file")
-public class ParsedFile {
+public class ParsedFileInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long fileId;
@@ -22,14 +22,12 @@ public class ParsedFile {
     @Column(name = "error_message")
     private String errorMessage;
 
-    public ParsedFile() {
+    public ParsedFileInfo() {
     }
 
-    public ParsedFile(String fileUrl, Date date, String fileStatus, String errorMessage) {
+    public ParsedFileInfo(String fileUrl, Date date) {
         this.fileUrl = fileUrl;
         this.date = date;
-        this.fileStatus = fileStatus;
-        this.errorMessage = errorMessage;
     }
 
     public Long getFileId() {

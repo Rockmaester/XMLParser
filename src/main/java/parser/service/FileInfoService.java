@@ -2,7 +2,7 @@ package parser.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import parser.entity.ParsedFile;
+import parser.entity.ParsedFileInfo;
 import parser.repo.FileInfoRepo;
 
 
@@ -11,7 +11,7 @@ public class FileInfoService {
     @Autowired
     private FileInfoRepo fileInfoRepo;
 
-    public void save(ParsedFile parsedFile){
-        fileInfoRepo.save(parsedFile);
+    public void save(ParsedFileInfo parsedFileInfo){
+        fileInfoRepo.save(parsedFileInfo);
     }
 }

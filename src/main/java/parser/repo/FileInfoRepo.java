@@ -2,7 +2,7 @@ package parser.repo;
 
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import parser.entity.ParsedFile;
+import parser.entity.ParsedFileInfo;
 
-public interface FileInfoRepo extends JpaRepository<ParsedFile, Long> {
+public interface FileInfoRepo extends JpaRepository<ParsedFileInfo, Long> {
 }

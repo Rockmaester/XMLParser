@@ -2,7 +2,7 @@ package parser;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import parser.entity.ParsedFile;
+import parser.entity.ParsedFileInfo;
 import parser.service.FileInfoService;
 
 import java.io.BufferedReader;
@@ -22,15 +22,29 @@ public class XMLParser {
     @Autowired
     private FileInfoService fileInfoService;
 
-    void parseFile(Path filePath) {
+    void parseFile(String stringUrl) {
+        ParsedFileInfo parsedFileInfo = new ParsedFileInfo(stringUrl, new Date());
+        Path storageFilePath;
+
+        try {
+            storageFilePath = FileDownloader.downloadFile(stringUrl);
+        } catch (IOException e) {
+            parsedFileInfo.setFileStatus("FAILURE");
+            parsedFileInfo.setErrorMessage("Error reading file from web by url");
+            fileInfoService.save(parsedFileInfo);
+            return;
+        }
 
         StringBuilder fileContent = new StringBuilder();
-        try (BufferedReader fileReader = new BufferedReader(new FileReader(filePath.toString()))) {
+        try (BufferedReader fileReader = new BufferedReader(new FileReader(storageFilePath.toString()))) {
             while (fileReader.ready()){
                 fileContent.append(fileReader.readLine());
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            parsedFileInfo.setFileStatus("FAILURE");
+            parsedFileInfo.setErrorMessage("Incoming file reading error");
+            fileInfoService.save(parsedFileInfo);
+            return;
         }
 
         String fileContentLikeString = fileContent.toString().replaceAll("[\\r\\n]+", "");
@@ -46,16 +60,15 @@ public class XMLParser {
         }
 
         System.out.println(map); // todo
+        System.out.println(parsedFileInfo); // todo
 
-        ParsedFile parsedFile = new ParsedFile(filePath.toString(), new Date(), "successful", "no errors");
-        System.out.println(parsedFile);
-        fileInfoService.save(parsedFile);
+        parsedFileInfo.setFileStatus("SUCCESS");
+        fileInfoService.save(parsedFileInfo);
 
         try {
-            Files.delete(filePath);
+            Files.delete(storageFilePath);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
-
 }
