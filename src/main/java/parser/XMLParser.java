@@ -3,6 +3,7 @@ package parser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import parser.entity.ParsedFileInfo;
+import parser.entity.TagRecord;
 import parser.service.FileInfoService;
 
 import java.io.BufferedReader;
@@ -37,7 +38,7 @@ public class XMLParser {
 
         StringBuilder fileContent = new StringBuilder();
         try (BufferedReader fileReader = new BufferedReader(new FileReader(storageFilePath.toString()))) {
-            while (fileReader.ready()){
+            while (fileReader.ready()) {
                 fileContent.append(fileReader.readLine());
             }
         } catch (IOException e) {
@@ -48,19 +49,19 @@ public class XMLParser {
         }
 
         String fileContentLikeString = fileContent.toString().replaceAll("[\\r\\n]+", "");
-
         Map<String, Integer> map = new HashMap<>();
 
         Pattern pattern = Pattern.compile("<\\w+:?\\w+");
         Matcher matcher = pattern.matcher(fileContentLikeString);
-        while (matcher.find()){
+        while (matcher.find()) {
             String s = matcher.group();
             s = s.replace("<", "");
-            map.merge(s,1, (oldVal, newVal) -> oldVal + newVal);
+            map.merge(s, 1, (oldVal, newVal) -> oldVal + newVal);
         }
 
-        System.out.println(map); // todo
-        System.out.println(parsedFileInfo); // todo
+        for (Map.Entry<String, Integer> pair : map.entrySet()) {
+            parsedFileInfo.addTagRecordToList(new TagRecord(pair.getKey(), pair.getValue(), parsedFileInfo));
+        }
 
         parsedFileInfo.setFileStatus("SUCCESS");
         fileInfoService.save(parsedFileInfo);

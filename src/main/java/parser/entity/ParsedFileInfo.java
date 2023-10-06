@@ -1,13 +1,16 @@
 package parser.entity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "parsed_file")
 public class ParsedFileInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "file_id")
     private Long fileId;
 
     @Column(name = "file_url")
@@ -22,12 +25,22 @@ public class ParsedFileInfo {
     @Column(name = "error_message")
     private String errorMessage;
 
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<TagRecord> tagRecordsList;
+
     public ParsedFileInfo() {
     }
 
     public ParsedFileInfo(String fileUrl, Date date) {
         this.fileUrl = fileUrl;
         this.date = date;
+    }
+
+    public void addTagRecordToList(TagRecord tagRecord) {
+        if (tagRecordsList == null) {
+            tagRecordsList = new ArrayList<>();
+        }
+        tagRecordsList.add(tagRecord);
     }
 
     public Long getFileId() {
@@ -68,6 +81,14 @@ public class ParsedFileInfo {
 
     public void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
+    }
+
+    public List<TagRecord> getTagRecordsList() {
+        return tagRecordsList;
+    }
+
+    public void setTagRecordsList(List<TagRecord> tagRecordList) {
+        this.tagRecordsList = tagRecordList;
     }
 
     @Override

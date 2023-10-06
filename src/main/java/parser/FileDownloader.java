@@ -18,7 +18,6 @@ public class FileDownloader {
         InputStream inputStream;
         Path outputFilePath;
 
-
         url = new URL(stringUrl);
         connection = url.openConnection();
         inputStream = connection.getInputStream();
