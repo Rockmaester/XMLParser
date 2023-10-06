@@ -17,13 +17,6 @@ public class XmlParserApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-
-        // Заглушка
-//        String stringUrl = "http://integration.modeus-pages.custis.ru/docs/in/employees/groups.ru.files/groups.xsd";
-//        String stringUrl = "http://integration.modeus-pages.custis.ru/docs/out/planning/course-unit-realization-change.ru.files/course-unit-realization-new.xml";
-//        args = new String[1];
-//        args[0] = stringUrl;
-
         if (args.length > 0) {
             xmlParser.parseFile(args[0]);
         }
