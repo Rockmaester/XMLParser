@@ -1,0 +1,1 @@
+java -Xmx512 -Xmx1g -jar target/XMLParser-0.0.1-SNAPSHOT.jar http://integration.modeus-pages.custis.ru/docs/in/employees/groups.ru.files/groups.xsd

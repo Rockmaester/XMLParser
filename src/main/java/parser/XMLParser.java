@@ -9,7 +9,6 @@ import parser.service.FileInfoService;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Date;
 import java.util.HashMap;
@@ -66,10 +65,11 @@ public class XMLParser {
         parsedFileInfo.setFileStatus("SUCCESS");
         fileInfoService.save(parsedFileInfo);
 
-        try {
-            Files.delete(storageFilePath);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        // Удаление файла в хранилище после обработки.
+//        try {
+//            Files.delete(storageFilePath);
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
     }
 }
